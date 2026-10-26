@@ -1,0 +1,7 @@
+/* Директиви Tailwind CSS v3: при збірці PostCSS (див. postcss.config.js) замінює їх на згенеровані стилі. */
+/* base — скидання стандартних стилів браузера (preflight): прибирає відступи, маркери списків тощо. */
+@tailwind base;
+/* components — класи компонентів (з плагінів або власні через @layer components). */
+@tailwind components;
+/* utilities — утилітарні класи (p-4, flex, text-red-500...), які реально використано в index.html і src/**. */
+@tailwind utilities;
