@@ -1,0 +1,29 @@
+.card {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    background: #ffffff;
+    border-left: 4px solid #facc15;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.photo {
+    width: 120px;
+    height: 160px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.name {
+    margin-bottom: 4px;
+}
+
+.age {
+    color: #475569;
+    margin-bottom: 8px;
+}
+
+.info {
+    line-height: 1.5;
+}
