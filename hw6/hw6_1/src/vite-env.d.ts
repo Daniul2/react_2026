@@ -1,2 +1,2 @@
 /// <reference types="vite/client" />
-// ↑ Директива TypeScript: підключає типи Vite — щоб TS розумів import.meta.env, імпорти .svg/.css тощо.
+// ↑ TypeScript directive: adds Vite types — so TS understands import.meta.env, .svg/.css imports, etc.

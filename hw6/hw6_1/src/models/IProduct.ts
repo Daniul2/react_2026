@@ -1,83 +1,83 @@
-// Опис одного продукту з dummyjson (структура об'єкта у масиві products).
+// Description of one dummyjson product (structure of an object in the products array).
 export interface IProduct {
-    // Унікальний ідентифікатор продукту.
+    // Unique product identifier.
     id: number;
-    // Назва.
+    // Title.
     title: string;
-    // Опис.
+    // Description.
     description: string;
-    // Категорія (наприклад "beauty").
+    // Category (e.g. "beauty").
     category: string;
-    // Ціна.
+    // Price.
     price: number;
-    // Знижка у відсотках.
+    // Discount in percent.
     discountPercentage: number;
-    // Рейтинг (0–5).
+    // Rating (0–5).
     rating: number;
-    // Кількість на складі.
+    // Quantity in stock.
     stock: number;
-    // Масив тегів.
+    // Array of tags.
     tags: string[];
-    // Бренд.
+    // Brand.
     brand: string;
-    // Артикул (stock keeping unit).
+    // SKU (stock keeping unit).
     sku: string;
-    // Вага.
+    // Weight.
     weight: number;
-    // Розміри — вкладений об'єкт, описаний інтерфейсом IDimensions нижче.
+    // Dimensions — a nested object described by the IDimensions interface below.
     dimensions: IDimensions;
-    // Інформація про гарантію.
+    // Warranty information.
     warrantyInformation: string;
-    // Інформація про доставку.
+    // Shipping information.
     shippingInformation: string;
-    // Статус наявності ("In Stock", "Low Stock"...).
+    // Availability status ("In Stock", "Low Stock"...).
     availabilityStatus: string;
-    // Масив відгуків (кожен описаний IReviews).
+    // Array of reviews (each described by IReviews).
     reviews: IReviews[];
-    // Умови повернення.
+    // Return policy.
     returnPolicy: string;
-    // Мінімальна кількість для замовлення.
+    // Minimum order quantity.
     minimumOrderQuantity: number;
-    // Службова інформація (IMeta).
+    // Service information (IMeta).
     meta: IMeta;
-    // Масив посилань на фото.
+    // Array of image links.
     images: string[];
-    // Посилання на мініатюру.
+    // Thumbnail link.
     thumbnail: string;
 }
 
-// Розміри продукту. Без export — використовується лише всередині цього файлу.
+// Product dimensions. No export — used only inside this file.
 interface IDimensions {
-    // Ширина.
+    // Width.
     width: number;
-    // Висота.
+    // Height.
     height: number;
-    // Глибина.
+    // Depth.
     depth: number;
 }
 
-// Один відгук про продукт.
+// One product review.
 interface IReviews {
-    // Оцінка у відгуку (1–5).
+    // Review rating (1–5).
     rating: number;
-    // Текст відгуку.
+    // Review text.
     comment: string;
-    // Дата відгуку (рядок у форматі ISO).
+    // Review date (ISO string).
     date: string;
-    // Ім'я автора.
+    // Author name.
     reviewerName: string;
-    // Пошта автора.
+    // Author email.
     reviewerEmail: string;
 }
 
-// Службові дані продукту.
+// Product service data.
 interface IMeta {
-    // Коли створено (ISO-дата).
+    // Created at (ISO date).
     createdAt: string;
-    // Коли оновлено.
+    // Updated at.
     updatedAt: string;
-    // Штрихкод.
+    // Barcode.
     barcode: string;
-    // Посилання на картинку QR-коду.
+    // QR code image link.
     qrCode: string;
 }

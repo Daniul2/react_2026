@@ -1,4 +1,4 @@
-// Спільні поля всіх списків dummyjson
+// Common fields of all dummyjson lists
 export interface IDummyResponse {
     total: number;
     skip: number;

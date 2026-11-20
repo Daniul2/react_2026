@@ -1,10 +1,10 @@
 # hw1_3 (#kLZQR7Q98)
 
-З `arrays.js` взяти масив `simpsons`. Кореневий компонент — `App`.
-- `CharacterComponent` — вся інформація про окремого персонажа, опис передається через `children`.
-- `FamilyComponent` — ітерація по масиву `simpsons`.
+Take the `simpsons` array from `arrays.js`. The root component is `App`.
+- `CharacterComponent` — all information about one character; the description is passed through `children`.
+- `FamilyComponent` — iterates over the `simpsons` array.
 
-Стилізація підключена через CSS Modules.
+Styling is done with CSS Modules.
 
 ```
 npm install

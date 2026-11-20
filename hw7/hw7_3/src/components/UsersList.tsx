@@ -4,13 +4,13 @@ import type {IUsersResponse} from '../models/IUser.ts';
 import {ErrorMessage, Loading} from './StatusView.tsx';
 
 export const UsersList = () => {
-    // Один рядок замість useState + useEffect + fetch
+    // One line instead of useState + useEffect + fetch
     const state = useFetch<IUsersResponse>(urls.users);
 
     if (state.status === 'loading') return <Loading/>;
     if (state.status === 'error') return <ErrorMessage message={state.error}/>;
 
-    // Тут TypeScript уже знає, що state.data: IUsersResponse
+    // Here TypeScript already knows that state.data: IUsersResponse
     return (
         <ul className="flex flex-col gap-1">
             {state.data.users.map(user => (

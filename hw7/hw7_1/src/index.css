@@ -7,7 +7,7 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* ThemeProvider ставить <html data-theme="dark"> */
+/* ThemeProvider sets <html data-theme="dark"> */
 html[data-theme='dark'] body {
     background: #0f172a;
     color: #e2e8f0;

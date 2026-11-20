@@ -1,9 +1,9 @@
-// Точка входу: createRoot монтує React у <div id="root">
+// Entry point: createRoot mounts React into <div id="root">
 import {createRoot} from 'react-dom/client';
-// Глобальні стилі + Tailwind
+// Global styles + Tailwind
 import './index.css';
-// Кореневий компонент
+// Root component
 import App from './App.tsx';
 
-// Без StrictMode, щоб логи в консолі не дублювались (StrictMode у dev рендерить двічі)
+// Without StrictMode, so console logs are not duplicated (StrictMode renders twice in dev)
 createRoot(document.getElementById('root')!).render(<App/>);

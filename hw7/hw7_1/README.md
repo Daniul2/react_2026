@@ -1,41 +1,41 @@
-# ДЗ 7 — дерево компонентів + Context + перемикач теми
+# HW 7 — component tree + Context + theme toggle
 
-**Завдання (#GP0nA6rxivp):** зробити дерево компонентів у дві сторони (чим глибше, тим краще),
-зробити контекст і кнопку, яка міняє тему зі світлої на темну.
+**Task (#GP0nA6rxivp):** build a component tree with two branches (the deeper the better),
+create a context and a button that switches the theme from light to dark.
 
-## Дерево
+## Tree
 
 ```
-<ThemeProvider>                      ← тримає стан theme + toggleTheme
- └─ <App>                            рівень 0
-     ├─ <LeftLevel1>                 рівень 1        ├─ <RightLevel1>
-     │   └─ <LeftLevel2>             рівень 2        │   └─ <RightLevel2>
-     │       └─ <LeftLevel3>         рівень 3        │       └─ <RightLevel3>
-     │           └─ <LeftLevel4>     рівень 4        │           └─ <RightLevel4>
-     │               └─ <LeftLevel5> рівень 5        │               └─ <RightLevel5>
-     │                   └─ <LeftLevel6>  рівень 6   │                   └─ <RightLevel6>
-     │                       └─ <ThemeInfo/>  ◄──────┼─── читає тему        └─ <ThemeToggleButton/>  ── міняє тему
+<ThemeProvider>                      ← holds the theme state + toggleTheme
+ └─ <App>                            level 0
+     ├─ <LeftLevel1>                 level 1         ├─ <RightLevel1>
+     │   └─ <LeftLevel2>             level 2         │   └─ <RightLevel2>
+     │       └─ <LeftLevel3>         level 3         │       └─ <RightLevel3>
+     │           └─ <LeftLevel4>     level 4         │           └─ <RightLevel4>
+     │               └─ <LeftLevel5> level 5         │               └─ <RightLevel5>
+     │                   └─ <LeftLevel6>  level 6    │                   └─ <RightLevel6>
+     │                       └─ <ThemeInfo/>  ◄──────┼─── reads the theme   └─ <ThemeToggleButton/>  ── changes the theme
 ```
 
-Кнопка внизу **правої** гілки міняє тему, а `<ThemeInfo/>` внизу **лівої** гілки одразу її показує.
-Гілки ніяк не пов'язані пропсами — обидві беруть дані з одного контексту. Кожен `<TreeNode>`
-теж читає тему з контексту, тому перефарбовується все дерево.
+The button at the bottom of the **right** branch changes the theme, and `<ThemeInfo/>` at the bottom of the **left** branch shows it immediately.
+The branches are not connected by props — both take the data from the same context. Every `<TreeNode>`
+also reads the theme from the context, so the whole tree is repainted.
 
-## Файли
+## Files
 
-| Файл | Що робить |
+| File | What it does |
 |---|---|
-| `src/models/Theme.ts` | тип `'light' \| 'dark'` |
+| `src/models/Theme.ts` | the `'light' \| 'dark'` type |
 | `src/context/ThemeContext.ts` | `createContext<IThemeContext \| null>(null)` |
-| `src/context/ThemeProvider.tsx` | `useState` теми, `toggleTheme` через `useCallback`, `value` через `useMemo`, збереження в `localStorage`, `data-theme` на `<html>` |
-| `src/hooks/useTheme.ts` | `useContext` + помилка, якщо компонент поза провайдером |
-| `src/components/TreeNode.tsx` | рамка вузла дерева, кольори залежать від теми |
-| `src/components/left/LeftLevel1…6.tsx` | ліва гілка |
-| `src/components/right/RightLevel1…6.tsx` | права гілка |
-| `src/components/ThemeToggleButton.tsx` | кнопка перемикання теми |
-| `src/components/ThemeInfo.tsx` | показує поточну тему |
+| `src/context/ThemeProvider.tsx` | theme `useState`, `toggleTheme` via `useCallback`, `value` via `useMemo`, saving to `localStorage`, `data-theme` on `<html>` |
+| `src/hooks/useTheme.ts` | `useContext` + an error if the component is outside the provider |
+| `src/components/TreeNode.tsx` | tree node frame, colors depend on the theme |
+| `src/components/left/LeftLevel1…6.tsx` | left branch |
+| `src/components/right/RightLevel1…6.tsx` | right branch |
+| `src/components/ThemeToggleButton.tsx` | theme toggle button |
+| `src/components/ThemeInfo.tsx` | shows the current theme |
 
-## Запуск
+## Getting started
 
 ```bash
 npm install

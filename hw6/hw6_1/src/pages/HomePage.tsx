@@ -1,7 +1,7 @@
-// Головна сторінка (маршрут "/"). Логіки немає — просто текст, щоб було видно, що роутинг працює.
+// Home page (route "/"). No logic — just text to show that routing works.
 export const HomePage = () => {
     return (
-        // Фрагмент з текстом "home page".
+        // Fragment with the text "home page".
         <>
 
             home page

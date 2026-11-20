@@ -1,99 +1,99 @@
-// axios — бібліотека для HTTP-запитів (зручніша за fetch: сам парсить JSON, має interceptors, кидає помилку на 4xx/5xx).
+// axios — HTTP request library (handier than fetch: parses JSON itself, has interceptors, throws on 4xx/5xx).
 import axios from 'axios';
-// Типи (інтерфейси) відповідей сервера, щоб TypeScript знав структуру даних.
+// Server response types (interfaces), so TypeScript knows the data structure.
 import {IUserWithTokens} from "../models/IUserWithTokens.ts";
 import {IProduct} from "../models/IProduct.ts";
 import {IProductsResponseModelType} from "../models/IProductsResponseModelType.ts";
-// Хелпер для читання та парсингу значень з localStorage.
+// Helper for reading and parsing values from localStorage.
 import {retriveLocalStorage} from "./helpers.ts";
-// Тип пари токенів, яку повертає /auth/refresh.
+// Type of the token pair returned by /auth/refresh.
 import {ITokenPair} from "../models/ITokenPair.ts";
 
-// Тип даних, які ми відправляємо на логін (тіло POST-запиту).
+// Type of the data we send to login (POST request body).
 type LoginData = {
-    // Логін користувача.
+    // User's username.
     username: string;
-    // Пароль.
+    // Password.
     password: string;
-    // Час життя accessToken у хвилинах.
+    // accessToken lifetime in minutes.
     expiresInMins: number
 }
 
-// Створюємо власний екземпляр axios з налаштуваннями, спільними для всіх запитів цього сервісу.
+// Create our own axios instance with settings shared by all requests of this service.
 const axiosInstance = axios.create({
-    // Базова адреса: до неї дописуються шляхи запитів ('/login' → https://dummyjson.com/auth/login).
+    // Base address: request paths are appended to it ('/login' → https://dummyjson.com/auth/login).
     baseURL: 'https://dummyjson.com/auth',
-    // Заголовки за замовчуванням — тут порожньо (Authorization додаємо динамічно в interceptor нижче).
+    // Default headers — empty here (Authorization is added dynamically in the interceptor below).
     headers: {}
 });
 
 
-// Interceptor (перехоплювач) запитів: ця функція виконується ПЕРЕД відправкою кожного запиту через axiosInstance.
-// requestObject — конфіг запиту (url, method, headers, data...), який можна змінити.
+// Request interceptor: this function runs BEFORE every request sent through axiosInstance.
+// requestObject — the request config (url, method, headers, data...) that can be changed.
 axiosInstance.interceptors.request.use((requestObject) => {
-    // Додаємо токен лише для GET-запитів (у цьому прикладі GET — це захищені ресурси, наприклад /products).
-    // method може бути undefined, тому "?." ; toUpperCase — бо axios зберігає метод у нижньому регістрі ('get').
+    // Add the token only to GET requests (in this example GET means protected resources, e.g. /products).
+    // method may be undefined, hence "?." ; toUpperCase — because axios stores the method in lower case ('get').
     if (requestObject.method?.toUpperCase() === 'GET') {
-        // Читаємо збереженого користувача з localStorage і ставимо заголовок
-        // Authorization: Bearer <accessToken> — так сервер дізнається, хто робить запит.
-        // Якщо користувача ще немає, helper поверне {} і заголовок буде "Bearer undefined" → сервер відповість 401.
+        // Read the saved user from localStorage and set the header
+        // Authorization: Bearer <accessToken> — this is how the server knows who makes the request.
+        // If there is no user yet, the helper returns {} and the header is "Bearer undefined" → the server answers 401.
         requestObject.headers.Authorization = 'Bearer ' + retriveLocalStorage<IUserWithTokens>('user').accessToken
     }
-    // Обов'язково повертаємо (змінений) конфіг — інакше запит не буде відправлено.
+    // Always return the (modified) config — otherwise the request is not sent.
     return requestObject;
 
 })
 
 
-// Логін: відправляє логін/пароль, отримує користувача з токенами, зберігає його в localStorage.
-// Деструктуризуємо аргумент одразу в параметрах: ({username, password, expiresInMins}: LoginData).
-// Promise<IUserWithTokens> — функція асинхронна і зрештою поверне користувача з токенами.
+// Login: sends username/password, receives the user with tokens, saves it to localStorage.
+// Destructure the argument right in the parameters: ({username, password, expiresInMins}: LoginData).
+// Promise<IUserWithTokens> — the function is async and eventually returns the user with tokens.
 export const login = async ({username, password, expiresInMins}: LoginData): Promise<IUserWithTokens> => {
 
-    // POST https://dummyjson.com/auth/login з тілом {username, password, expiresInMins}.
-    // <IUserWithTokens> — тип поля data у відповіді.
-    // {data: userWithTokens} — з відповіді axios беремо поле data і перейменовуємо його в userWithTokens.
-    // Це POST, тож interceptor токен НЕ додає (його ще й немає — ми саме його отримуємо).
+    // POST https://dummyjson.com/auth/login with the body {username, password, expiresInMins}.
+    // <IUserWithTokens> — type of the data field in the response.
+    // {data: userWithTokens} — take the data field from the axios response and rename it to userWithTokens.
+    // This is POST, so the interceptor does NOT add a token (there is none yet — we are getting it now).
     const {data: userWithTokens} = await axiosInstance.post<IUserWithTokens>('/login', {username, password, expiresInMins});
-    // Виводимо отриманого користувача з accessToken і refreshToken у консоль.
+    // Log the received user with accessToken and refreshToken to the console.
     console.log(userWithTokens);
-    // Зберігаємо в localStorage під ключем 'user'. localStorage вміє зберігати лише рядки, тому JSON.stringify.
+    // Save to localStorage under the 'user' key. localStorage stores only strings, hence JSON.stringify.
     localStorage.setItem('user', JSON.stringify(userWithTokens));
-    // Повертаємо користувача тому, хто викликав login (на випадок, якщо він захоче ним скористатися).
+    // Return the user to the caller of login (in case they want to use it).
     return userWithTokens;
 }
 
-// Завантаження захищених продуктів. Повертає масив продуктів.
+// Loading protected products. Returns an array of products.
 export const loadAuthProducts = async (): Promise<IProduct[]> => {
-    // GET https://dummyjson.com/auth/products — interceptor додасть Authorization: Bearer <accessToken>.
-    // Якщо токен невалідний/протух — axios кине помилку (401), і її зловить .catch на сторінці.
-    // {data: {products}} — вкладена деструктуризація: з response.data одразу беремо поле products.
+    // GET https://dummyjson.com/auth/products — the interceptor adds Authorization: Bearer <accessToken>.
+    // If the token is invalid/expired — axios throws an error (401), and .catch on the page catches it.
+    // {data: {products}} — nested destructuring: take the products field straight from response.data.
     const {data: {products}} = await axiosInstance.get<IProductsResponseModelType>('/products');
 
-    // Повертаємо лише масив продуктів (без total/skip/limit).
+    // Return only the products array (without total/skip/limit).
     return products
 }
 
 
-// Оновлення токенів: обмінюємо refreshToken на нову пару accessToken + refreshToken.
+// Token refresh: exchange the refreshToken for a new accessToken + refreshToken pair.
 export const refresh = async () => {
 
-    // Дістаємо збереженого користувача (у ньому лежить поточний refreshToken).
+    // Get the saved user (it holds the current refreshToken).
     const iUserWithTokens = retriveLocalStorage<IUserWithTokens>('user');
-    // POST https://dummyjson.com/auth/refresh. Це POST, тож interceptor не чіпає заголовки.
-    // З відповіді (тип ITokenPair) одразу дістаємо нові accessToken і refreshToken.
+    // POST https://dummyjson.com/auth/refresh. This is POST, so the interceptor does not touch the headers.
+    // Take the new accessToken and refreshToken straight from the response (type ITokenPair).
     const {data: {accessToken, refreshToken}} = await axiosInstance.post<ITokenPair>('/refresh', {
-        // Тіло запиту: refreshToken, за яким сервер видасть нові токени.
+        // Request body: the refreshToken for which the server issues new tokens.
         refreshToken: iUserWithTokens.refreshToken,
-        // Бажаний час життя нового accessToken. Увага: тут одруківка — API очікує "expiresInMins" (з "s"),
-        // тому цей параметр сервер ігнорує і видає токен з часом життя за замовчуванням (60 хв).
+        // Desired lifetime of the new accessToken. Note: there is a typo — the API expects "expiresInMins" (with "s"),
+        // so the server ignores this parameter and issues a token with the default lifetime (60 min).
         expiresInMin: 1
     });
-    // Замінюємо старий accessToken на новий у нашому об'єкті користувача.
+    // Replace the old accessToken with the new one in our user object.
     iUserWithTokens.accessToken = accessToken;
-    // Так само замінюємо refreshToken (сервер видає новий, старий більше не використовуємо).
+    // Replace the refreshToken the same way (the server issues a new one, the old one is no longer used).
     iUserWithTokens.refreshToken = refreshToken;
-    // Перезаписуємо користувача в localStorage — наступні запити (через interceptor) візьмуть уже новий токен.
+    // Overwrite the user in localStorage — the next requests (through the interceptor) take the new token.
     localStorage.setItem('user', JSON.stringify(iUserWithTokens));
 
 

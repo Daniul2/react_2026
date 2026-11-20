@@ -1,22 +1,22 @@
-# ДЗ 7 (розбір) — `memo`, `useMemo`, `useCallback`
+# HW 7 (walkthrough) — `memo`, `useMemo`, `useCallback`
 
-**Завдання:** відтворити процедуру використання `useCallback`, `useMemo`, `memo` і описати кожен рядок —
-що і навіщо. Коментарі стоять над/поруч з кожним рядком у `src/`.
+**Task:** reproduce how `useCallback`, `useMemo` and `memo` are used and describe every line —
+what it does and why. The comments are above/next to every line in `src/`.
 
-## Коротко
+## In short
 
-| Інструмент | Що кешує | Коли перераховує | Навіщо тут |
+| Tool | What it caches | When it recomputes | Why it is used here |
 |---|---|---|---|
-| `memo(Component)` | **результат рендеру компонента** | коли змінився хоч один пропс (`Object.is`) | `UserList` і `UserItem` не перемальовуються при натисканні «+1» |
-| `useMemo(() => value, deps)` | **значення** | коли змінились `deps` | фільтр + сортування 5000 користувачів лише при зміні `query`; масив зберігає те саме посилання |
-| `useCallback(fn, deps)` | **функцію** (посилання) | коли змінились `deps` | `handleSelect` — та сама функція, тож `memo` у дітей працює |
+| `memo(Component)` | **the component's render result** | when at least one prop changes (`Object.is`) | `UserList` and `UserItem` don't re-render when "+1" is clicked |
+| `useMemo(() => value, deps)` | **a value** | when `deps` change | filtering + sorting 5000 users only when `query` changes; the array keeps the same reference |
+| `useCallback(fn, deps)` | **a function** (reference) | when `deps` change | `handleSelect` is the same function, so `memo` in the children works |
 
-`memo` без `useMemo`/`useCallback` у батька часто не працює: новий масив чи нова стрілочна функція
-на кожному рендері — це вже «інший» пропс.
+`memo` without `useMemo`/`useCallback` in the parent often does not work: a new array or a new arrow function
+on every render is already a "different" prop.
 
-## Як перевірити
+## How to check
 
-1. `npm install && npm run dev`, відкрити консоль.
-2. Натискати **«+1»** → у консолі **немає** нових `🧮 useMemo` і `🔁 UserList render`.
-3. Друкувати в пошук → з'являються обидва логи (query змінився → новий масив → список ререндериться).
-4. Клікнути на користувача → тільки `🔁 UserList render` (змінився `selectedId`), без `🧮`.
+1. `npm install && npm run dev`, open the console.
+2. Click **"+1"** → the console shows **no** new `🧮 useMemo` and `🔁 UserList render`.
+3. Type into the search → both logs appear (query changed → new array → the list re-renders).
+4. Click a user → only `🔁 UserList render` (`selectedId` changed), without `🧮`.

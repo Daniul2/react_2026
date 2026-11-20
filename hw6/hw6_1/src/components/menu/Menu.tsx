@@ -1,26 +1,26 @@
-// Link — посилання React Router. На відміну від <a href>, НЕ перезавантажує сторінку,
-// а лише змінює url і перемальовує потрібну частину (клієнтський перехід).
+// Link — React Router link. Unlike <a href>, it does NOT reload the page,
+// it only changes the url and re-renders the needed part (client-side navigation).
 import {Link} from "react-router-dom";
 
-// Компонент меню (стрілочна функція, яка повертає JSX).
+// Menu component (an arrow function that returns JSX).
 const Menu = () => {
     return (
         <div>
-            {/* Ненумерований список посилань. */}
+            {/* Unordered list of links. */}
             <ul>
-                {/* to={'/'} — перехід на головну (спрацює index-маршрут → HomePage). */}
+                {/* to={'/'} — go to home (the index route → HomePage). */}
                 <li><Link to={'/'}>home</Link></li>
-                {/* Перехід на /login → LoginPage (там і відбувається логін). */}
+                {/* Go to /login → LoginPage (the login happens there). */}
                 <li><Link to={'/login'}>login</Link></li>
-                {/* Перехід на /auth/resources → сторінка, що тягне ЗАХИЩЕНІ дані (потрібен токен). */}
+                {/* Go to /auth/resources → a page that fetches PROTECTED data (a token is required). */}
                 <li><Link to={'/auth/resources'}>resources</Link></li>
             </ul>
-            {/* Горизонтальна лінія, щоб відокремити меню від вмісту сторінки. */}
+            {/* Horizontal line to separate the menu from the page content. */}
             <hr/>
 
         </div>
     );
 };
 
-// Експорт за замовчуванням — тому в MainLayout імпорт виглядає як `import Menu from ...`.
+// Default export — that's why the import in MainLayout looks like `import Menu from ...`.
 export default Menu;

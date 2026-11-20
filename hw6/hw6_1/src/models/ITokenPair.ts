@@ -1,7 +1,7 @@
-// Пара токенів, яку повертає POST /auth/refresh.
+// Token pair returned by POST /auth/refresh.
 export interface ITokenPair {
-    // Короткоживучий токен доступу — передається в заголовку Authorization: Bearer <accessToken>.
+    // Short-lived access token — sent in the Authorization: Bearer <accessToken> header.
     accessToken: string;
-    // Довгоживучий токен — використовується лише для отримання нової пари токенів, коли accessToken протух.
+    // Long-lived token — used only to get a new token pair when the accessToken has expired.
     refreshToken: string;
 }

@@ -1,33 +1,33 @@
-// memo — щоб список не перемальовувався, поки його пропси ті самі
+// memo — so the list doesn't re-render while its props are the same
 import {memo} from 'react';
-// Тільки типи
+// Types only
 import type {FC} from 'react';
 import type {IUser} from '../models/IUser.ts';
-// Дочірній елемент списку (теж у memo)
+// Child list item (also in memo)
 import {UserItem} from './UserItem.tsx';
 
-// Пропси списку
+// List props
 interface IProps {
-    users: IUser[];                     // відфільтрований масив — стабільний завдяки useMemo у App
-    selectedId: number | null;          // хто зараз виділений
-    onSelect: (id: number) => void;     // стабільний колбек з useCallback
+    users: IUser[];                     // filtered array — stable thanks to useMemo in App
+    selectedId: number | null;          // who is selected right now
+    onSelect: (id: number) => void;     // stable callback from useCallback
 }
 
-// Список у memo. Якби App передавав новий масив або нову функцію на кожному рендері,
-// memo не допоміг би — порівняння пропсів іде по посиланню
+// The list in memo. If App passed a new array or a new function on every render,
+// memo would not help — props are compared by reference
 export const UserList: FC<IProps> = memo(({users, selectedId, onSelect}) => {
-    // Лог, щоб у консолі було видно, КОЛИ список реально ререндериться
+    // Log so the console shows WHEN the list actually re-renders
     console.log('🔁 UserList render, елементів:', users.length);
 
-    // Показуємо перші 100, щоб DOM не був величезним
+    // Show the first 100 so the DOM is not huge
     return (
         <ul className="max-h-96 overflow-auto rounded border border-slate-300 bg-white p-2 text-sm">
             {users.slice(0, 100).map(user => (
                 <UserItem
-                    key={user.id}                           // стабільний ключ для React
-                    user={user}                             // той самий об'єкт між рендерами
-                    isSelected={user.id === selectedId}     // true лише для одного елемента
-                    onSelect={onSelect}                     // та сама функція між рендерами
+                    key={user.id}                           // stable key for React
+                    user={user}                             // the same object between renders
+                    isSelected={user.id === selectedId}     // true only for one item
+                    onSelect={onSelect}                     // the same function between renders
                 />
             ))}
         </ul>

@@ -1,6 +1,6 @@
-// Тип одного користувача у списку
+// Type of one user in the list
 export interface IUser {
-    id: number;      // унікальний ідентифікатор — піде в key і в onSelect
-    name: string;    // ім'я, по ньому фільтруємо
-    age: number;     // вік, по ньому сортуємо
+    id: number;      // unique identifier — used as key and in onSelect
+    name: string;    // name, used for filtering
+    age: number;     // age, used for sorting
 }

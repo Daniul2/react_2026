@@ -1,10 +1,10 @@
 # hw2_2 (#hQj9gOH)
 
-Дані отримати з апі - https://dummyjson.com/products
+Get the data from the API - https://dummyjson.com/products
 
-Створити необхідні моделі та компоненти щоб вивести всю інформацію з отриманих об'єктів
+Create the necessary models and components to render all the information from the received objects.
 
-Додати мінімальну стилізацію
+Add minimal styling.
 
 ```
 npm install

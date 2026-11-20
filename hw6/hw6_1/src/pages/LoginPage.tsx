@@ -1,28 +1,28 @@
-// useEffect — хук для побічних ефектів (запити, таймери тощо) після рендеру компонента.
+// useEffect — hook for side effects (requests, timers, etc.) after the component renders.
 import {useEffect} from "react";
-// Функція логіну з нашого сервісу: робить POST /auth/login і зберігає користувача з токенами в localStorage.
+// Login function from our service: makes POST /auth/login and saves the user with tokens to localStorage.
 import {login} from "../services/api.service.ts";
 
-// Сторінка логіну (маршрут "/login").
+// Login page (route "/login").
 export const LoginPage = () => {
-    // Ефект з порожнім масивом залежностей [] виконується ОДИН раз — коли сторінка з'являється на екрані.
+    // An effect with an empty dependency array [] runs ONCE — when the page appears on screen.
     useEffect(() => {
-        // Одразу логінимося. Форми ще немає — дані "зашиті" в код для демонстрації.
+        // Log in right away. There is no form yet — the data is hardcoded for the demo.
         login({
-            // Тестовий користувач, який існує в dummyjson.
+            // Test user that exists in dummyjson.
             username: 'emilys',
-            // Його пароль.
+            // Their password.
             password: 'emilyspass',
-            // Скільки хвилин житиме accessToken. 1 хв — навмисно мало,
-            // щоб швидко побачити, як токен протухає і як працює refresh.
+            // How many minutes the accessToken lives. 1 min — intentionally short,
+            // to quickly see how the token expires and how refresh works.
             expiresInMins: 1
         });
-        // Promise, який повертає login, тут не обробляється (немає .then/.catch) —
-        // результат ми побачимо в console.log всередині login і в localStorage.
+        // The Promise returned by login is not handled here (no .then/.catch) —
+        // we see the result in console.log inside login and in localStorage.
     }, []);
 
     return (
-        // Просто текст сторінки.
+        // Just the page text.
         <>
             login Page
         </>

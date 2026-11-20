@@ -6,5 +6,5 @@ export interface IThemeContext {
     toggleTheme: () => void;
 }
 
-// null за замовчуванням — щоб useTheme() міг помітити, що компонент стоїть поза <ThemeProvider>
+// null by default — so useTheme() can detect that a component is outside <ThemeProvider>
 export const ThemeContext = createContext<IThemeContext | null>(null);

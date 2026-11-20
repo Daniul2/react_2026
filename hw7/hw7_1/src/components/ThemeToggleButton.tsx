@@ -1,6 +1,6 @@
 import {useTheme} from '../hooks/useTheme.ts';
 
-// Кнопка лежить у самому низу правої гілки, але міняє тему для всього застосунку
+// The button sits at the very bottom of the right branch but changes the theme for the whole app
 export const ThemeToggleButton = () => {
     const {theme, toggleTheme} = useTheme();
     const isDark = theme === 'dark';

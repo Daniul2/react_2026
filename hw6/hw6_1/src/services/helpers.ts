@@ -1,18 +1,18 @@
-// Допоміжна узагальнена (generic) функція: дістає з localStorage значення за ключем і парсить його з JSON.
-// <T> — тип, який ми очікуємо отримати (наприклад IUserWithTokens). Задається при виклику: retriveLocalStorage<IUserWithTokens>('user').
-// (Назва з одруківкою: правильно було б "retrieve", але використовується саме так по всьому проєкту.)
+// Helper generic function: gets a value from localStorage by key and parses it from JSON.
+// <T> — the type we expect to get (e.g. IUserWithTokens). Set at the call site: retriveLocalStorage<IUserWithTokens>('user').
+// (The name has a typo: it should be "retrieve", but it is used this way across the project.)
 export const retriveLocalStorage = <T>(key: string) => {
-    // localStorage.getItem повертає рядок або null, якщо ключа немає. "|| ''" перетворює null на порожній рядок.
+    // localStorage.getItem returns a string or null if the key is missing. "|| ''" turns null into an empty string.
     const object = localStorage.getItem(key) || '';
-    // Якщо нічого не збережено (порожній рядок) —
+    // If nothing is saved (empty string) —
     if (!object) {
-        // повертаємо порожній об'єкт, "прикинувши" його до типу T. Так код далі не впаде,
-        // але поля будуть undefined (наприклад, accessToken → undefined).
+        // return an empty object cast to type T. This way the code below won't crash,
+        // but the fields will be undefined (e.g. accessToken → undefined).
         return {} as T;
     }
-    // Інакше перетворюємо JSON-рядок назад в об'єкт.
+    // Otherwise turn the JSON string back into an object.
     const parse = JSON.parse(object);
-    // І повертаємо його з типом T (TypeScript повірить нам на слово — перевірки структури немає).
+    // And return it with type T (TypeScript takes our word for it — there is no structure check).
     return parse as T;
 
 }

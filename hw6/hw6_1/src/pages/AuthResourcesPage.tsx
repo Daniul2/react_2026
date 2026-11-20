@@ -1,38 +1,38 @@
-// useEffect — щоб зробити запит один раз після появи сторінки.
+// useEffect — to make a request once after the page appears.
 import {useEffect} from "react";
-// loadAuthProducts — GET /auth/products (захищений ресурс, потрібен accessToken);
-// refresh — POST /auth/refresh, отримує нову пару токенів за refreshToken.
+// loadAuthProducts — GET /auth/products (protected resource, accessToken required);
+// refresh — POST /auth/refresh, gets a new token pair by refreshToken.
 import {loadAuthProducts, refresh} from "../services/api.service.ts";
 
-// Сторінка захищених ресурсів (маршрут "/auth/resources").
+// Protected resources page (route "/auth/resources").
 export const AuthResourcesPage = () => {
 
-    // Виконується один раз при відкритті сторінки ([] — без залежностей).
+    // Runs once when the page opens ([] — no dependencies).
     useEffect(() => {
-        // 1) Пробуємо завантажити продукти з поточним accessToken (його додає interceptor в api.service.ts).
+        // 1) Try to load products with the current accessToken (the interceptor in api.service.ts adds it).
         loadAuthProducts().then(products => {
-            // Успіх — токен ще живий, просто виводимо продукти в консоль.
+            // Success — the token is still valid, just log the products to the console.
             console.log(products)
-        // 2) Помилка — найімовірніше 401 Unauthorized: accessToken протух (жив 1 хвилину)
-        //    або ми ще не логінилися.
+        // 2) Error — most likely 401 Unauthorized: the accessToken expired (it lived 1 minute)
+        //    or we have not logged in yet.
         }).catch(reason => {
-            // Виводимо помилку, щоб побачити її в консолі (там буде статус 401).
+            // Log the error to see it in the console (status 401 will be there).
             console.log(reason);
-            // 3) Оновлюємо токени: відправляємо refreshToken, отримуємо нові accessToken + refreshToken
-            //    і refresh() сам записує їх у localStorage.
+            // 3) Refresh the tokens: send the refreshToken, get a new accessToken + refreshToken
+            //    and refresh() saves them to localStorage itself.
             refresh()
-                // 4) Коли нові токени збережені — повторюємо той самий запит (interceptor візьме вже НОВИЙ токен).
+                // 4) When the new tokens are saved — repeat the same request (the interceptor takes the NEW token).
                 .then(() => loadAuthProducts())
-                // 5) Виводимо продукти, отримані після оновлення токена.
+                // 5) Log the products received after the token refresh.
                 .then(value => console.log(value))
-            // Примітка: якщо і refresh не вдасться (refreshToken теж протух / не логінились) —
-            // помилка тут не обробляється, і в консолі буде "Uncaught (in promise)".
+            // Note: if refresh also fails (the refreshToken expired too / not logged in) —
+            // the error is not handled here, and the console shows "Uncaught (in promise)".
         })
 
     }, []);
 
     return (
-        // Сторінка нічого не малює з даних — результат дивимось у консолі браузера (F12 → Console).
+        // The page renders no data — check the result in the browser console (F12 → Console).
         <>
             AuthResourcesPage
         </>

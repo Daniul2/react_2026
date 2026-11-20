@@ -1,9 +1,9 @@
-# ДЗ 7 (розбір) — кастомний хук `useFetch<T>(url)`
+# HW 7 (walkthrough) — custom hook `useFetch<T>(url)`
 
-**Завдання (#cf69cHp):** створити кастомний хук, який повертає відповіді з API і замінює
-`useState` + `useEffect`. Ендпоінт — аргумент хука. Продумати типізацію відповіді.
+**Task (#cf69cHp):** create a custom hook that returns API responses and replaces
+`useState` + `useEffect`. The endpoint is a hook argument. Think through the response typing.
 
-## Використання
+## Usage
 
 ```tsx
 const state = useFetch<IUsersResponse>(urls.users);
@@ -11,12 +11,12 @@ const state = useFetch<IUsersResponse>(urls.users);
 if (state.status === 'loading') return <Loading/>;
 if (state.status === 'error') return <ErrorMessage message={state.error}/>;
 
-state.data.users.map(...) // state.data: IUsersResponse — без `?.` і `!`
+state.data.users.map(...) // state.data: IUsersResponse — no `?.` and no `!`
 ```
 
-## Типізація
+## Typing
 
-Хук повертає `FetchState<T>` (`src/models/FetchState.ts`) — **discriminated union** по полю `status`:
+The hook returns `FetchState<T>` (`src/models/FetchState.ts`) — a **discriminated union** by the `status` field:
 
 ```ts
 type FetchState<T> =
@@ -25,22 +25,22 @@ type FetchState<T> =
     | {status: 'error';   data: null; error: string};
 ```
 
-Чому так, а не `{data: T | null; isLoading: boolean; error: string | null}`:
-- неможливі «дивні» комбінації (`isLoading: true` і водночас `error`);
-- після перевірки `status` TypeScript сам звужує тип: у гілці `'success'` `data` має тип `T`.
+Why this and not `{data: T | null; isLoading: boolean; error: string | null}`:
+- "weird" combinations are impossible (`isLoading: true` together with an `error`);
+- after checking `status` TypeScript narrows the type itself: in the `'success'` branch `data` has type `T`.
 
-`T` задає той, хто викликає хук. Хук не валідує JSON у рантаймі, тому інтерфейси в `src/models/`
-описують реальну відповідь dummyjson (спільні поля `total/skip/limit` винесені в `IDummyResponse`).
+`T` is set by the caller. The hook does not validate the JSON at runtime, so the interfaces in `src/models/`
+describe the real dummyjson response (the shared `total/skip/limit` fields are moved to `IDummyResponse`).
 
-## Що ще враховано
+## What else is handled
 
-- **`AbortController`** — при зміні `url` або розмонтуванні старий запит скасовується, тож стара відповідь
-  не перезапише нову (race condition).
-- **`response.ok`** — `fetch` не кидає помилку на 404/500, тому хук перевіряє статус сам
-  (вкладка «Помилка 404» це показує).
-- `catch (error: unknown)` → безпечно дістаємо `message`.
+- **`AbortController`** — when `url` changes or the component unmounts, the old request is canceled, so an old response
+  can't overwrite the new one (race condition).
+- **`response.ok`** — `fetch` does not throw on 404/500, so the hook checks the status itself
+  (the "404 error" tab shows this).
+- `catch (error: unknown)` → the `message` is extracted safely.
 
-## Запуск
+## Getting started
 
 ```bash
 npm install

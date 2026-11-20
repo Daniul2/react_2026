@@ -1,16 +1,16 @@
-// Імпортуємо тип одного продукту, щоб описати масив продуктів.
+// Import the type of one product to describe the products array.
 import {IProduct} from "./IProduct";
 
-// Структура відповіді GET /auth/products (dummyjson віддає список з "пагінаційними" полями).
-// Тут використано type (а не interface) — для опису об'єкта вони працюють однаково.
+// Structure of the GET /auth/products response (dummyjson returns a list with "pagination" fields).
+// type is used here (not interface) — for describing an object they work the same.
 export type IProductsResponseModelType = {
-    // Скільки всього продуктів є на сервері.
+    // Total number of products on the server.
     total: number;
-    // Скільки продуктів пропущено (зсув від початку).
+    // How many products were skipped (offset from the start).
     skip: number;
-    // Скільки продуктів повернуто в цій відповіді (за замовчуванням 30).
+    // How many products are returned in this response (30 by default).
     limit: number;
-    // Сам масив продуктів.
+    // The products array itself.
     products: IProduct[]
 
 }
