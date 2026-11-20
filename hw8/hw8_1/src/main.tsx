@@ -22,5 +22,5 @@ createRoot(document.getElementById('root')!).render(
             {/* The router renders the page that matches the url. */}
             <RouterProvider router={router}/>
         </Provider>
-    </StrictMode>,
+    </StrictMode>, // End of StrictMode.
 );

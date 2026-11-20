@@ -35,6 +35,7 @@ export const UserWithPosts: FC<IUserWithPostsProps> = ({user}) => (
                     <details>
                         {/* Visible part: post title and number of comments. Click expands the block. */}
                         <summary className="cursor-pointer px-3 py-2 font-medium hover:bg-slate-50">
+                            {/* Post title and the number of its comments. */}
                             {post.title} <span className="text-xs font-normal text-slate-400">· comments: {post.comments.length}</span>
                         </summary>
                         {/* Content that appears after expanding. */}

@@ -3,7 +3,10 @@
 
 /* Base page styles: system font, light grey background, dark text. */
 body {
+    /* System font of the operating system. */
     font-family: system-ui, sans-serif;
+    /* Light grey page background. */
     background: #f1f5f9;
+    /* Dark text color. */
     color: #0f172a;
 }

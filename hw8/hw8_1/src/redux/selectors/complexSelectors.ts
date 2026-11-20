@@ -39,8 +39,9 @@ const groupBy = <T, K>(items: T[], getKey: (item: T) => K): Map<K, T[]> => {
         const key = getKey(item);
         // Look for an existing group with this key.
         const group = map.get(key);
-        // Group exists — add the item to it; otherwise create a new group with one item.
+        // Group exists — add the item to it.
         if (group) group.push(item);
+        // No group yet — create a new group with this one item.
         else map.set(key, [item]);
     }
     // Return the finished map of groups.
@@ -80,6 +81,7 @@ export const selectUsersWithPostsAndComments = createSelector(
 // Statuses of all three slices in one object (for the menu indicator and the /complex page).
 // createSelector is needed so the object is not recreated on every render without changes.
 export const selectLoadStatuses = createSelector(
+    // Input selectors: one per slice status.
     [
         // Users status.
         (state: RootState) => state.usersSlice.status,

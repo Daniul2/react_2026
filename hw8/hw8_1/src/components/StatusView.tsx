@@ -22,6 +22,7 @@ export const ErrorMessage: FC<IErrorMessageProps> = ({message, onRetry}) => (
         {onRetry && (
             // Click calls onRetry — the parent dispatches the thunk again.
             <button type="button" onClick={onRetry} className="cursor-pointer rounded bg-red-600 px-2 py-0.5 text-sm text-white">
+                {/* Button text. */}
                 Try again
             </button>
         )}

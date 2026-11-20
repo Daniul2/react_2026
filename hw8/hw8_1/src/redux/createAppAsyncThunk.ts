@@ -11,6 +11,7 @@ export const createAppAsyncThunk = createAsyncThunk.withTypes<{
     state: RootState;
     // Type of the value passed to rejectWithValue (error text).
     rejectValue: string;
+    // End of the type parameters; withTypes returns the typed createAsyncThunk.
 }>();
 
 // Whether we need to call the API: no data yet (idle) or the previous request failed (failed).

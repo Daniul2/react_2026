@@ -24,6 +24,7 @@ export const CommentsPage = () => {
 
     // Request failed — show the error and a button that retries the request.
     if (status === 'failed') {
+        // onRetry dispatches the same thunk again; error ?? '' — in case the error text is null.
         return <ErrorMessage message={error ?? ''} onRetry={() => dispatch(commentsSliceActions.loadComments())}/>;
     }
     // No data yet (idle or loading) — show the loading text.

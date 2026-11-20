@@ -15,6 +15,7 @@ import {NotFoundPage} from '../pages/NotFoundPage.tsx';
 
 // App router (passed to RouterProvider in main.tsx).
 export const router = createBrowserRouter([
+    // The only top-level route object.
     {
         // Parent route — the site root.
         path: '/',

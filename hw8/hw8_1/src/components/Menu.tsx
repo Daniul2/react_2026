@@ -18,6 +18,7 @@ const links = [
 // Menu component: renders the dark navigation bar with links to all pages
 // and the store fill indicator. Has no props.
 export const Menu = () => {
+    // Render the markup of the component.
     return (
         // Navigation bar: links on the left, indicator on the right.
         <nav className="flex flex-wrap items-center justify-between gap-3 bg-slate-900 px-6 py-4">
@@ -27,6 +28,7 @@ export const Menu = () => {
                 {links.map(({to, label}) => (
                     // key — the path, it is unique for every item.
                     <li key={to}>
+                        {/* Navigation link to the page. */}
                         <NavLink
                             // Where the link leads.
                             to={to}
@@ -34,6 +36,7 @@ export const Menu = () => {
                             end
                             // className function: isActive = true for the current page → white background.
                             className={({isActive}) =>
+                                // Base classes + extra classes depending on isActive.
                                 `block rounded px-4 py-2 font-medium transition-colors ${
                                     isActive ? 'bg-white text-slate-900' : 'text-slate-200 hover:bg-slate-700'
                                 }`

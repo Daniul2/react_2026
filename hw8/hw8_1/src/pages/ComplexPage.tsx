@@ -28,6 +28,7 @@ export const ComplexPage = () => {
     const users = useAppSelector(selectUsersWithPostsAndComments);
     // Error texts of the three slices joined into one string with "; " (empty ones are dropped).
     const errors = useAppSelector(state =>
+        // Array of the three error texts → drop null/empty → join with "; ".
         [state.usersSlice.error, state.postsSlice.error, state.commentsSlice.error].filter(Boolean).join('; '));
 
     // Remember what was in the store at the moment of entering the page — to show where the data came from.
@@ -41,8 +42,11 @@ export const ComplexPage = () => {
     const loadMissing = () => {
         // Every thunk has a condition: whatever is already in the store is NOT fetched from the API again.
         // So only the missing data is loaded here (e.g. if only /users was visited).
+        // Load users (skipped if they are already in the store).
         dispatch(usersSliceActions.loadUsers());
+        // Load posts (skipped if they are already in the store).
         dispatch(postsSliceActions.loadPosts());
+        // Load comments (skipped if they are already in the store).
         dispatch(commentsSliceActions.loadComments());
     };
 
@@ -59,6 +63,7 @@ export const ComplexPage = () => {
     // Users to show: all of them or only the one selected in the filter.
     const visibleUsers = selectedUserId === 'all' ? users : users.filter(user => user.id === selectedUserId);
 
+    // All data is in the store — render the page.
     return (
         // Page wrapper.
         <section>
@@ -71,6 +76,7 @@ export const ComplexPage = () => {
                 {(Object.keys(statusesOnEnter) as (keyof typeof statusesOnEnter)[]).map(key => {
                     // Was the data already in the store before entering the page?
                     const fromStore = statusesOnEnter[key] === 'succeeded';
+                    // Render the badge of this slice.
                     return (
                         // Green badge — from the store, yellow — loaded from the API.
                         <span key={key} className={`rounded px-2 py-0.5 ${fromStore ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
@@ -83,12 +89,15 @@ export const ComplexPage = () => {
 
             {/* Filter by user. */}
             <label className="mb-4 flex items-center gap-2 text-sm">
+                {/* Label text of the filter. */}
                 User:
+                {/* Dropdown with the list of users. */}
                 <select
                     // Current value — the selected id or 'all'.
                     value={selectedUserId}
                     // On change: keep 'all' as a string, otherwise convert the id to a number.
                     onChange={event => setSelectedUserId(event.target.value === 'all' ? 'all' : Number(event.target.value))}
+                    // Tailwind styles of the dropdown.
                     className="rounded border border-slate-300 bg-white px-2 py-1"
                 >
                     {/* "Show all" option with the number of users. */}

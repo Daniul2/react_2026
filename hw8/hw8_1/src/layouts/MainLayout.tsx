@@ -6,6 +6,7 @@ import {Menu} from '../components/Menu.tsx';
 // MainLayout component: the frame of all pages — menu on top and the current page below it.
 // It is the element of the parent route "/", so it renders on every page.
 export const MainLayout = () => {
+    // Render the markup of the component.
     return (
         // Fragment — groups the menu and main without an extra div.
         <>
