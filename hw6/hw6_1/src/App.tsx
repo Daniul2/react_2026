@@ -1,18 +1,18 @@
-// Підключення стилів App.css (файл порожній).
+// Import App.css styles (the file is empty).
 import './App.css';
 
-// Компонент App залишився від шаблону Vite. У цьому прикладі він НІДЕ не використовується:
-// main.tsx рендерить RouterProvider, а спільну розмітку дає MainLayout.
+// The App component is left from the Vite template. In this example it is NOT used anywhere:
+// main.tsx renders RouterProvider, and MainLayout provides the shared markup.
 function App() {
 
 
     return (
-        // Порожній фрагмент — нічого не рендерить.
+        // Empty fragment — renders nothing.
         <>
 
         </>
     );
 }
 
-// Експорт за замовчуванням (на випадок, якщо компонент знадобиться).
+// Default export (in case the component is needed).
 export default App

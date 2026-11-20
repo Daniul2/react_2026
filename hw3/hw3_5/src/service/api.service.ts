@@ -4,7 +4,7 @@ import type {PostsResponseModel, UsersResponseModel} from '../models/ResponseMod
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-// без параметрів — api віддає перший пул (30 об'єктів)
+// without params the api returns the first batch (30 objects)
 const loadUsers = async (): Promise<UserModel[]> => {
     return await fetch(baseUrl + '/users')
         .then(value => value.json())

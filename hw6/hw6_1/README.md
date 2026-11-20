@@ -1,19 +1,19 @@
-# ДЗ 6 — розбір прикладу `lessons/lesson6/authentication`
+# HW 6 — walkthrough of the `lessons/lesson6/authentication` example
 
-Код взятий з гілки [OktenSchool/react → lessons/lesson6/authentication](https://github.com/OktenSchool/react/tree/lessons/lesson6/authentication/src)
-**без змін** — над кожним рядком у `src/` додано коментар, що він робить.
+The code is taken from the [OktenSchool/react → lessons/lesson6/authentication](https://github.com/OktenSchool/react/tree/lessons/lesson6/authentication/src) branch
+**unchanged** — a comment explaining what it does is added above every line in `src/`.
 
-## Що робить застосунок
+## What the app does
 
-Демонструє авторизацію через JWT-токени на [dummyjson.com/auth](https://dummyjson.com/docs/auth):
+It demonstrates authorization with JWT tokens on [dummyjson.com/auth](https://dummyjson.com/docs/auth):
 
-1. **`/login`** → `login()` робить `POST /auth/login` з логіном/паролем і отримує користувача
-   з двома токенами: `accessToken` (живе 1 хв) і `refreshToken`. Усе зберігається в `localStorage['user']`.
-2. **`/auth/resources`** → `loadAuthProducts()` робить `GET /auth/products`.
-   Interceptor axios перед кожним GET-запитом додає заголовок `Authorization: Bearer <accessToken>`.
-3. Якщо `accessToken` протух → сервер відповідає **401** → у `.catch` викликається `refresh()`:
-   `POST /auth/refresh` з `refreshToken` → нова пара токенів записується в `localStorage`
-   → запит продуктів повторюється вже з новим токеном.
+1. **`/login`** → `login()` makes `POST /auth/login` with username/password and receives the user
+   with two tokens: `accessToken` (lives 1 min) and `refreshToken`. Everything is saved to `localStorage['user']`.
+2. **`/auth/resources`** → `loadAuthProducts()` makes `GET /auth/products`.
+   Before every GET request the axios interceptor adds the `Authorization: Bearer <accessToken>` header.
+3. If the `accessToken` has expired → the server answers **401** → `.catch` calls `refresh()`:
+   `POST /auth/refresh` with the `refreshToken` → the new token pair is saved to `localStorage`
+   → the products request is repeated with the new token.
 
 ```
 LoginPage ──login()──► POST /auth/login ──► localStorage['user'] = {...user, accessToken, refreshToken}
@@ -21,45 +21,45 @@ LoginPage ──login()──► POST /auth/login ──► localStorage['user']
 AuthResourcesPage ──loadAuthProducts()──► interceptor: + Authorization: Bearer accessToken ──► GET /auth/products
         │                                                                                         │
         │◄──────────────────────────── 200: products ◄──────────────────────────────────────────┤
-        │◄──────────────────────────── 401: токен протух ◄──────────────────────────────────────┘
-        └─► refresh() ──► POST /auth/refresh {refreshToken} ──► нові токени в localStorage ──► loadAuthProducts() ще раз
+        │◄──────────────────────────── 401: token expired ◄─────────────────────────────────────┘
+        └─► refresh() ──► POST /auth/refresh {refreshToken} ──► new tokens in localStorage ──► loadAuthProducts() again
 ```
 
-## Файли
+## Files
 
-| Файл | Роль |
+| File | Role |
 |---|---|
-| `main.tsx` | Точка входу: рендерить `RouterProvider` з роутером |
-| `routes/routes.tsx` | Маршрути: `/` (Home), `/login`, `/auth/resources` всередині `MainLayout` |
-| `layouts/MainLayout.tsx` | Меню + `<Outlet/>` для поточної сторінки |
-| `components/menu/Menu.tsx` | Посилання `Link` на три сторінки |
-| `pages/LoginPage.tsx` | Логін при відкритті сторінки (дані зашиті в код) |
-| `pages/AuthResourcesPage.tsx` | Запит захищених продуктів + refresh при помилці |
-| `services/api.service.ts` | axios-екземпляр, interceptor, `login`, `loadAuthProducts`, `refresh` |
-| `services/helpers.ts` | `retriveLocalStorage<T>` — читання та парсинг JSON з `localStorage` |
-| `models/*` | TypeScript-типи відповідей сервера |
-| `App.tsx`, `App.css` | Залишки шаблону Vite, не використовуються |
+| `main.tsx` | Entry point: renders `RouterProvider` with the router |
+| `routes/routes.tsx` | Routes: `/` (Home), `/login`, `/auth/resources` inside `MainLayout` |
+| `layouts/MainLayout.tsx` | Menu + `<Outlet/>` for the current page |
+| `components/menu/Menu.tsx` | `Link`s to the three pages |
+| `pages/LoginPage.tsx` | Logs in when the page opens (the data is hardcoded) |
+| `pages/AuthResourcesPage.tsx` | Request for protected products + refresh on error |
+| `services/api.service.ts` | axios instance, interceptor, `login`, `loadAuthProducts`, `refresh` |
+| `services/helpers.ts` | `retriveLocalStorage<T>` — reads and parses JSON from `localStorage` |
+| `models/*` | TypeScript types of the server responses |
+| `App.tsx`, `App.css` | Leftovers from the Vite template, not used |
 
-## Як подивитися в дії
+## How to see it in action
 
 ```
 npm install
 npm run dev
 ```
 
-Відкрити `http://localhost:5173`, натиснути **F12**:
+Open `http://localhost:5173` and press **F12**:
 
-1. Перейти на **login** → у *Console* з'явиться користувач з токенами,
-   у *Application → Local Storage* — ключ `user`.
-2. Одразу перейти на **resources** → у *Console* масив продуктів (токен ще живий).
-3. Зачекати > 1 хв і знову відкрити **resources** → у *Network* видно `products` зі статусом **401**,
-   потім `refresh` (200) і повторний `products` (200); у *Console* — помилка і продукти.
+1. Go to **login** → the user with tokens appears in *Console*,
+   and the `user` key appears in *Application → Local Storage*.
+2. Go to **resources** right away → *Console* shows the products array (the token is still valid).
+3. Wait > 1 min and open **resources** again → *Network* shows `products` with status **401**,
+   then `refresh` (200) and a repeated `products` (200); *Console* shows the error and the products.
 
-## Що помітив під час розбору
+## What I noticed during the walkthrough
 
-- `refresh()` відправляє `expiresInMin` замість `expiresInMins` → сервер ігнорує параметр,
-  тож новий `accessToken` живе за замовчуванням 60 хв, а не 1.
-- Якщо відкрити **resources** без логіну, interceptor надішле `Bearer undefined` → 401,
-  `refresh()` теж впаде (немає `refreshToken`), а ця помилка ніде не обробляється (`Uncaught (in promise)`).
-- Interceptor додає токен лише до GET-запитів — `login` і `refresh` (POST) токен не потребують.
-- Назва `retriveLocalStorage` з одруківкою (`retrieve`).
+- `refresh()` sends `expiresInMin` instead of `expiresInMins` → the server ignores the parameter,
+  so the new `accessToken` lives the default 60 min, not 1.
+- If you open **resources** without logging in, the interceptor sends `Bearer undefined` → 401,
+  `refresh()` fails too (there is no `refreshToken`), and this error is not handled anywhere (`Uncaught (in promise)`).
+- The interceptor adds the token only to GET requests — `login` and `refresh` (POST) don't need a token.
+- The name `retriveLocalStorage` has a typo (`retrieve`).

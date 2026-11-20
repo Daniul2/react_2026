@@ -6,7 +6,7 @@ interface IProps extends PropsWithChildren {
     level: number;
 }
 
-// Один вузол дерева. Тему бере НАПРЯМУ з контексту — пропси з темою по дереву не передаються.
+// One tree node. Takes the theme DIRECTLY from context — no theme props are passed down the tree.
 export const TreeNode: FC<IProps> = ({title, level, children}) => {
     const {theme} = useTheme();
     const isDark = theme === 'dark';

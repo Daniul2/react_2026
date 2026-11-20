@@ -1,26 +1,26 @@
-// createBrowserRouter — створює роутер, який працює з адресним рядком браузера (History API, звичайні url без #).
+// createBrowserRouter — creates a router that works with the browser address bar (History API, normal urls without #).
 import {createBrowserRouter} from "react-router-dom";
-// Layout (каркас) — спільна обгортка для всіх сторінок: меню + місце для сторінки.
+// Layout — a shared wrapper for all pages: menu + a place for the page.
 import {MainLayout} from "../layouts/MainLayout.tsx";
-// Сторінки, які будуть підставлятися в <Outlet/> лейаута.
+// Pages that are inserted into the layout's <Outlet/>.
 import {HomePage} from "../pages/HomePage.tsx";
 import {LoginPage} from "../pages/LoginPage.tsx";
 import {AuthResourcesPage} from "../pages/AuthResourcesPage.tsx";
 
 
-// Експортуємо готовий роутер, щоб передати його в <RouterProvider router={routes}/> у main.tsx.
-// Аргумент — масив об'єктів-маршрутів (router object).
+// Export the ready router to pass it to <RouterProvider router={routes}/> in main.tsx.
+// The argument is an array of route objects (router object).
 export const routes = createBrowserRouter([
     {
-        // Батьківський маршрут "/": завжди рендерить MainLayout.
-        // children — дочірні маршрути; їхні element показуються всередині <Outlet/> лейаута.
+        // Parent route "/": always renders MainLayout.
+        // children — child routes; their element is shown inside the layout's <Outlet/>.
         path: '/', element: <MainLayout/>, children: [
-            // index: true — маршрут "за замовчуванням" для батьківського шляху, тобто рівно "/" → HomePage.
+            // index: true — the "default" route for the parent path, i.e. exactly "/" → HomePage.
             {index: true, element: <HomePage/>},
-            // Відносний шлях 'login' → повна адреса "/login" → LoginPage.
+            // Relative path 'login' → full address "/login" → LoginPage.
             {path: 'login', element: <LoginPage/>},
-            // Тут шлях записаний абсолютним ("/auth/resources"). У дочірньому маршруті так можна,
-            // якщо він починається з шляху батька ("/"). Еквівалентно запису 'auth/resources'.
+            // Here the path is absolute ("/auth/resources"). This is allowed in a child route
+            // if it starts with the parent path ("/"). Equivalent to 'auth/resources'.
             {path: '/auth/resources', element: <AuthResourcesPage/>},
         ]
     }

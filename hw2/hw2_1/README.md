@@ -1,12 +1,12 @@
 # hw2_1 (#ohm4AivCEBv)
 
-https://jsonplaceholder.typicode.com/todos - тут масив даних. ознайомтесь з ним для початку
+https://jsonplaceholder.typicode.com/todos - the data array is here. Get familiar with it first.
 
-Створити компонент TodoComponent який буде містити інформацію про окремий об'єкт з масиву.
+Create a TodoComponent that contains information about a single object from the array.
 
-Створити компонент TodosComponent в якому відбувається ітерація масиву даних отриманих з апі.
+Create a TodosComponent that iterates over the data array received from the API.
 
-Кореневим компонентом є App
+The root component is App.
 
 ```
 npm install

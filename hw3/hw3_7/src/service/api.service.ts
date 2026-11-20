@@ -4,7 +4,7 @@ import type {CartsResponseModel, UsersResponseModel} from '../models/ResponseMod
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-// limit=0 — всі користувачі, а не лише перші 30
+// limit=0 — all users, not only the first 30
 const loadUsers = async (): Promise<UserModel[]> => {
     return await fetch(baseUrl + '/users?limit=0')
         .then(value => value.json())

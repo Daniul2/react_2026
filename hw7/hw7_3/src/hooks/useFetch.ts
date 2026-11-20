@@ -1,33 +1,33 @@
 import {useEffect, useState} from 'react';
 import type {FetchState} from '../models/FetchState.ts';
 
-// Один спільний об'єкт "завантаження" — підходить для будь-якого T, бо data тут null
+// One shared "loading" object — works for any T, because data is null here
 const LOADING = {status: 'loading', data: null, error: null} as const;
 
-// Внутрішній стан: результат + url, для якого він отриманий
+// Internal state: the result + the url it was received for
 interface IStoredResult<T> {
     url: string;
     result: FetchState<T>;
 }
 
 /**
- * Завантажує JSON з `url` і повертає стан запиту. Замінює пару useState + useEffect у компоненті.
+ * Loads JSON from `url` and returns the request state. Replaces the useState + useEffect pair in a component.
  *
- * T — тип відповіді API, його задає той, хто викликає хук: `useFetch<IUsersResponse>(urls.users)`.
- * Хук сам не перевіряє форму JSON — T це "обіцянка" про відповідь, тому інтерфейси в models/
- * мають збігатися з тим, що реально повертає сервер.
+ * T — the API response type, set by the caller: `useFetch<IUsersResponse>(urls.users)`.
+ * The hook does not validate the JSON shape — T is a "promise" about the response, so the interfaces in models/
+ * must match what the server actually returns.
  */
 export const useFetch = <T>(url: string): FetchState<T> => {
     const [stored, setStored] = useState<IStoredResult<T> | null>(null);
 
     useEffect(() => {
-        // AbortController — щоб скасувати запит, якщо url змінився або компонент розмонтувався.
-        // Інакше стара відповідь могла б прийти пізніше за нову і перезаписати її (race condition).
+        // AbortController — to cancel the request if the url changed or the component unmounted.
+        // Otherwise an old response could arrive after the new one and overwrite it (race condition).
         const controller = new AbortController();
 
         fetch(url, {signal: controller.signal})
             .then(response => {
-                // fetch НЕ кидає помилку на 404/500 — перевіряємо самі
+                // fetch does NOT throw on 404/500 — check it ourselves
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status} ${response.statusText}`.trim());
                 }
@@ -35,7 +35,7 @@ export const useFetch = <T>(url: string): FetchState<T> => {
             })
             .then(data => setStored({url, result: {status: 'success', data, error: null}}))
             .catch((error: unknown) => {
-                // Скасований запит — це не помилка для користувача
+                // A canceled request is not an error for the user
                 if (controller.signal.aborted) return;
                 const message = error instanceof Error ? error.message : String(error);
                 setStored({url, result: {status: 'error', data: null, error: message}});
@@ -44,8 +44,8 @@ export const useFetch = <T>(url: string): FetchState<T> => {
         return () => controller.abort();
     }, [url]);
 
-    // "Завантаження" не зберігаємо в стані, а виводимо: результату ще немає,
-    // або він лишився від попереднього url → для поточного url ми ще чекаємо відповідь
+    // "Loading" is not stored in state but derived: there is no result yet,
+    // or it is left from the previous url → we are still waiting for the response for the current url
     if (!stored || stored.url !== url) return LOADING;
 
     return stored.result;

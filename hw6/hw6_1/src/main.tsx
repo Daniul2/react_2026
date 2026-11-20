@@ -1,16 +1,16 @@
-// Точка входу застосунку: цей файл підключається в index.html через <script type="module" src="/src/main.tsx">.
+// App entry point: this file is included in index.html via <script type="module" src="/src/main.tsx">.
 
-// Імпортуємо функцію createRoot з React DOM — вона створює "корінь", у який React рендерить увесь застосунок.
+// Import createRoot from React DOM — it creates the "root" React renders the whole app into.
 import {createRoot} from 'react-dom/client'
-// Підключаємо глобальні стилі (директиви Tailwind). Vite сам вставить цей CSS у сторінку.
+// Import global styles (Tailwind directives). Vite injects this CSS into the page itself.
 import './index.css'
-// RouterProvider — компонент, який "вмикає" роутинг: слухає адресний рядок і показує потрібну сторінку.
+// RouterProvider — a component that "turns on" routing: listens to the address bar and shows the right page.
 import {RouterProvider} from "react-router-dom";
-// Імпортуємо наш об'єкт роутера (опис усіх маршрутів) з файлу routes.tsx.
+// Import our router object (description of all routes) from routes.tsx.
 import {routes} from "./routes/routes.tsx";
 
-// 1) document.getElementById('root') — знаходимо в index.html <div id="root"></div>.
-//    "!" (non-null assertion) каже TypeScript: "елемент точно існує, не null".
-// 2) createRoot(...) — робимо з цього div корінь React.
-// 3) .render(<RouterProvider router={routes}/>) — рендеримо роутер; далі він сам вирішує, що показати за поточним url.
+// 1) document.getElementById('root') — find <div id="root"></div> in index.html.
+//    "!" (non-null assertion) tells TypeScript: "the element definitely exists, not null".
+// 2) createRoot(...) — turn this div into the React root.
+// 3) .render(<RouterProvider router={routes}/>) — render the router; it then decides what to show for the current url.
 createRoot(document.getElementById('root')!).render(<RouterProvider router={routes}/>);

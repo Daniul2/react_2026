@@ -10,7 +10,7 @@ export const router = createBrowserRouter([
         element: <MainLayout/>,
         errorElement: <NotFoundPage/>,
         children: [
-            // сусідні маршрути: сторінка корзин повністю заміняє список користувачів
+            // sibling routes: the carts page fully replaces the users list
             {index: true, element: <HomePage/>},
             {path: 'users/:userId/carts', element: <CartsPage/>},
             {path: '*', element: <NotFoundPage/>},

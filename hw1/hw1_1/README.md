@@ -1,6 +1,6 @@
 # hw1_1 (#gi01MZ6v)
 
-З `arrays.js` взяти масив `coursesTitleArray` і вивести кожен його елемент, створивши необхідні моделі та компоненти. Стилізація підключена через CSS Modules.
+Take the `coursesTitleArray` array from `arrays.js` and render each of its items, creating the necessary models and components. Styling is done with CSS Modules.
 
 ```
 npm install

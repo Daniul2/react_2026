@@ -9,7 +9,7 @@ export const User: FC<PropType> = ({user}) => {
 
     return (
         <li>
-            {/* state — щоб на сторінці корзин показати ім'я без додаткового запиту */}
+            {/* state — to show the name on the carts page without an extra request */}
             <Link
                 to={`/users/${id}/carts`}
                 state={{user}}

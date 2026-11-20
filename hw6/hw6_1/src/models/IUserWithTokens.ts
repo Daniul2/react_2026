@@ -1,21 +1,21 @@
-// Відповідь POST /auth/login: дані користувача + його токени. Саме цей об'єкт зберігається в localStorage під ключем 'user'.
+// POST /auth/login response: user data + their tokens. This object is stored in localStorage under the 'user' key.
 export interface IUserWithTokens {
-    // Ідентифікатор користувача.
+    // User identifier.
     id: number;
-    // Логін.
+    // Username.
     username: string;
-    // Пошта.
+    // Email.
     email: string;
-    // Ім'я.
+    // First name.
     firstName: string;
-    // Прізвище.
+    // Last name.
     lastName: string;
-    // Стать.
+    // Gender.
     gender: string;
-    // Посилання на аватар.
+    // Avatar link.
     image: string;
-    // Токен доступу для захищених запитів (Authorization: Bearer ...).
+    // Access token for protected requests (Authorization: Bearer ...).
     accessToken: string;
-    // Токен для оновлення пари токенів через /auth/refresh.
+    // Token for refreshing the token pair via /auth/refresh.
     refreshToken: string;
 }

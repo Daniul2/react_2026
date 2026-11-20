@@ -4,7 +4,7 @@ import {Carts} from '../components/carts-component/Carts.tsx';
 
 export const CartsPage = () => {
     const {userId} = useParams();
-    // якщо сторінку відкрили напряму за адресою — state порожній, показуємо лише id
+    // if the page was opened directly by url — state is empty, show only the id
     const user = (useLocation().state as { user?: UserModel } | null)?.user;
 
     return (

@@ -2,7 +2,7 @@ import {useFetch} from '../hooks/useFetch.ts';
 import {urls} from '../constants/urls.ts';
 import {ErrorMessage, Loading} from './StatusView.tsx';
 
-// Навмисно неіснуючий ендпоінт — показує, як хук обробляє 404
+// Intentionally non-existent endpoint — shows how the hook handles 404
 export const BrokenRequest = () => {
     const state = useFetch<unknown>(urls.broken);
 

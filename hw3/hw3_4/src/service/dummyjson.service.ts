@@ -9,7 +9,7 @@ import type {
 
 const baseUrl = import.meta.env.VITE_DUMMYJSON_URL;
 
-// limit=0 — dummyjson віддає всі об'єкти, а не лише перші 30
+// limit=0 — dummyjson returns all objects, not only the first 30
 const loadDummyJsonUsers = async (): Promise<UserModel[]> => {
     return await fetch(baseUrl + '/users?limit=0')
         .then(value => value.json())

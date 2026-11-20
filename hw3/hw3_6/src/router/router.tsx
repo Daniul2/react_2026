@@ -11,8 +11,8 @@ export const router = createBrowserRouter([
         errorElement: <NotFoundPage/>,
         children: [
             {
-                // HomePage (список користувачів) лишається на місці,
-                // а корзини рендеряться в його <Outlet/> поруч зі списком
+                // HomePage (the users list) stays in place,
+                // and the carts render in its <Outlet/> next to the list
                 path: '',
                 element: <HomePage/>,
                 children: [

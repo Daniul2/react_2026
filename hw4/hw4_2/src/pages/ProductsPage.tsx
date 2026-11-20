@@ -7,7 +7,7 @@ import {Pagination} from '../components/pagination-component/Pagination.tsx';
 
 export const ProductsPage = () => {
     const [searchParams] = useSearchParams();
-    // номер сторінки береться з url (?page=2), некоректне значення -> 1
+    // the page number comes from the url (?page=2), an invalid value -> 1
     const page = Math.max(1, Number(searchParams.get('page')) || 1);
 
     const [response, setResponse] = useState<ProductsResponseModel | null>(null);

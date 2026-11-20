@@ -1,6 +1,6 @@
-// Стан запиту як discriminated union: по полю status TypeScript сам звужує тип.
-// Після перевірки `state.status === 'success'` поле `state.data` має тип T (а не T | null),
-// а після `state.status === 'error'` — є гарантований `state.error: string`.
+// Request state as a discriminated union: TypeScript narrows the type by the status field.
+// After checking `state.status === 'success'` the field `state.data` has type T (not T | null),
+// and after `state.status === 'error'` there is a guaranteed `state.error: string`.
 export type FetchState<T> =
     | {status: 'loading'; data: null; error: null}
     | {status: 'success'; data: T; error: null}

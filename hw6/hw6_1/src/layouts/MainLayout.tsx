@@ -1,17 +1,17 @@
-// Outlet — "дірка" в розмітці, куди React Router вставляє елемент поточного дочірнього маршруту.
+// Outlet — a "hole" in the markup where React Router inserts the element of the current child route.
 import {Outlet} from "react-router-dom";
-// Наш компонент меню з посиланнями (default export, тому імпорт без фігурних дужок).
+// Our menu component with links (default export, so it is imported without curly braces).
 import Menu from "../components/menu/Menu.tsx";
 
-// Компонент-каркас. Він вказаний як element батьківського маршруту "/" у routes.tsx,
-// тому рендериться на БУДЬ-ЯКІЙ сторінці застосунку.
+// Layout component. It is the element of the parent route "/" in routes.tsx,
+// so it renders on ANY page of the app.
 export const MainLayout = () => {
     return (
-        // <>...</> — фрагмент: групує кілька елементів без зайвого div у DOM.
+        // <>...</> — fragment: groups several elements without an extra div in the DOM.
         <>
-            {/* Меню завжди зверху. */}
+            {/* Menu is always on top. */}
             <Menu/>
-            {/* Сюди підставляється HomePage / LoginPage / AuthResourcesPage залежно від url. */}
+            {/* HomePage / LoginPage / AuthResourcesPage is inserted here depending on the url. */}
             <Outlet/>
         </>
     );

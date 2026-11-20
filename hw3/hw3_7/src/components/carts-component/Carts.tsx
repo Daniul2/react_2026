@@ -11,7 +11,7 @@ export const Carts = () => {
     const [loaded, setLoaded] = useState<LoadedType | null>(null);
 
     useEffect(() => {
-        let ignore = false; // щоб відповідь попереднього користувача не перезаписала поточного
+        let ignore = false; // so the previous user's response doesn't overwrite the current one
         loadCartsOfUser(userId).then(carts => {
             if (!ignore) setLoaded({userId, carts});
         });
@@ -20,7 +20,7 @@ export const Carts = () => {
         };
     }, [userId]);
 
-    // поки не прийшли корзини саме цього користувача — показуємо завантаження
+    // until the carts of exactly this user arrive — show loading
     if (loaded?.userId !== userId) return <p>Завантаження...</p>;
     if (!loaded.carts.length) return <p>У цього користувача немає корзин.</p>;
 

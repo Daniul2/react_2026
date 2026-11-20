@@ -1,20 +1,20 @@
-// memo — HOC, який пропускає ререндер, якщо пропси не змінились (порівняння через Object.is)
+// memo — a HOC that skips re-rendering if props did not change (compared with Object.is)
 import {memo} from 'react';
-// Тільки типи — у бандл не потраплять
+// Types only — they won't get into the bundle
 import type {FC} from 'react';
 import type {IUser} from '../models/IUser.ts';
 
-// Описуємо пропси елемента
+// Describe the item props
 interface IProps {
-    user: IUser;                        // сам користувач (посилання на об'єкт з масиву users — стабільне)
-    isSelected: boolean;                // чи виділений — примітив, порівнюється за значенням
-    onSelect: (id: number) => void;     // колбек — буде стабільним завдяки useCallback у App
+    user: IUser;                        // the user itself (reference to an object from the users array — stable)
+    isSelected: boolean;                // whether it is selected — a primitive, compared by value
+    onSelect: (id: number) => void;     // callback — stable thanks to useCallback in App
 }
 
-// Обгортаємо компонент у memo: при зміні лічильника в App цей елемент НЕ ререндериться,
-// бо user, isSelected та onSelect залишились тими самими
+// Wrap the component in memo: when the counter in App changes, this item does NOT re-render,
+// because user, isSelected and onSelect stayed the same
 export const UserItem: FC<IProps> = memo(({user, isSelected, onSelect}) => {
-    // Розмітка одного рядка; клік передає id нагору через onSelect
+    // Markup of one row; a click passes the id up through onSelect
     return (
         <li
             onClick={() => onSelect(user.id)}
