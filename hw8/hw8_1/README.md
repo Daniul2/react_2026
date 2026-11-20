@@ -1,56 +1,56 @@
-# ДЗ 8 — Redux Toolkit: users / posts / comments + маршрут `/complex`
+# Homework 8 — Redux Toolkit: users / posts / comments + `/complex` route
 
-**Завдання:** створити стейт для постів і коментарів (jsonplaceholder), зробити відповідні роути.
-Маршрут `/complex` показує юзера + його пости + коментарі до кожного поста. Дані беруться зі стору,
-а якщо чогось у сторі ще немає — сторінка сама довантажує лише те, чого бракує.
+**Task:** create state for posts and comments (jsonplaceholder) and the matching routes.
+The `/complex` route shows a user + their posts + the comments of each post. The data is taken from the store,
+and if something is not in the store yet, the page loads only what is missing.
 
-## Роути
+## Routes
 
-| Шлях        | Що показує                                   |
-|-------------|----------------------------------------------|
-| `/users`    | юзери (`usersSlice`)                         |
-| `/posts`    | пости (`postsSlice`)                         |
-| `/comments` | коментарі (`commentsSlice`)                  |
-| `/complex`  | юзер → його пости → коментарі поста          |
+| Path        | What it shows                                  |
+|-------------|------------------------------------------------|
+| `/users`    | users (`usersSlice`)                           |
+| `/posts`    | posts (`postsSlice`)                           |
+| `/comments` | comments (`commentsSlice`)                     |
+| `/complex`  | user → their posts → comments of each post     |
 
-## Як працює «не тягнути зайвий раз з API»
+## How "no extra API requests" works
 
-У кожному слайсі стан має вигляд `{items, status, error}`, де `status`: `idle | loading | succeeded | failed`.
+Every slice has the state `{items, status, error}`, where `status` is `idle | loading | succeeded | failed`.
 
-Кожен `createAsyncThunk` має опцію **`condition`**:
+Every `createAsyncThunk` has a **`condition`** option:
 
 ```ts
-condition: (_, {getState}) => shouldLoad(getState().postsSlice.status) // idle або failed
+condition: (_, {getState}) => shouldLoad(getState().postsSlice.status) // idle or failed
 ```
 
-`condition` виконується **до** запиту. Якщо дані вже є (`succeeded`) або запит уже летить (`loading`),
-thunk не стартує взагалі: немає ні `pending`, ні `fetch`. Тому:
+`condition` runs **before** the request. If the data is already there (`succeeded`) or the request is already in flight (`loading`),
+the thunk does not start at all: no `pending`, no `fetch`. That is why:
 
-- `/complex` просто робить `dispatch` усіх трьох thunk-ів. Те, що вже у сторі, з API повторно не береться.
-  Довантажується лише відсутнє (наприклад, якщо до цього відкривали тільки `/users`).
-- Повернення на `/users`, `/posts`, `/comments` теж не робить повторних запитів.
-- Подвійний `useEffect` у `StrictMode` не дає двох запитів, бо другий виклик бачить `loading`.
-- Після помилки (`failed`) можна повторити запит кнопкою «Спробувати ще».
+- `/complex` simply dispatches all three thunks. Whatever is already in the store is not fetched from the API again;
+  only the missing data is loaded (for example, if only `/users` was opened before).
+- Going back to `/users`, `/posts`, `/comments` does not send repeated requests either.
+- The double `useEffect` in `StrictMode` does not cause two requests, because the second call sees `loading`.
+- After an error (`failed`) the request can be retried with the "Try again" button.
 
-На `/complex` бейджі показують, що було **взято зі стору**, а що **довантажено з API**. У меню є індикатор:
-які слайси вже заповнені.
+On `/complex` the badges show which data was **taken from the store** and which was **loaded from the API**. The menu has an indicator
+showing which slices are already filled.
 
-## Збирання дерева user → posts → comments
+## Building the user → posts → comments tree
 
 `src/redux/selectors/complexSelectors.ts` — `createSelector`:
-- пости й коментарі групуються в `Map` за `userId` / `postId` (без `filter` у циклі);
-- результат мемоізований: поки дані у сторі не змінились, компонент отримує той самий масив.
+- posts and comments are grouped into a `Map` by `userId` / `postId` (no `filter` inside a loop);
+- the result is memoized: while the store data does not change, the component gets the same array.
 
-## Структура
+## Structure
 
 ```
 src/
-  constants/urls.ts            — ендпоінти jsonplaceholder
+  constants/urls.ts            — jsonplaceholder endpoints
   models/                      — IUser, IPost, IComment, LoadStatus
-  services/api.service.ts      — fetch + перевірка response.ok
+  services/api.service.ts      — fetch + response.ok check
   redux/
     store.ts                   — configureStore, RootState, AppDispatch
-    createAppAsyncThunk.ts     — типізований createAsyncThunk + shouldLoad
+    createAppAsyncThunk.ts     — typed createAsyncThunk + shouldLoad
     slices/                    — usersSlice, postsSlice, commentsSlice
     selectors/                 — selectUsersWithPostsAndComments, selectLoadStatuses
     hooks/                     — useAppDispatch, useAppSelector
@@ -59,7 +59,7 @@ src/
   router/router.tsx
 ```
 
-## Запуск
+## Getting started
 
 ```bash
 npm install

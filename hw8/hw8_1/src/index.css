@@ -1,5 +1,7 @@
+/* Tailwind CSS 4 import (all utility classes). */
 @import "tailwindcss";
 
+/* Base page styles: system font, light grey background, dark text. */
 body {
     font-family: system-ui, sans-serif;
     background: #f1f5f9;

@@ -1,45 +1,65 @@
+// createSlice — creates a reducer and actions for one part of the state.
 import {createSlice} from '@reduxjs/toolkit';
+// Type of one list item (IPost).
 import type {IPost} from '../../models/IPost.ts';
+// Common slice state type: {items, status, error}.
 import type {IListState} from '../../models/LoadStatus.ts';
+// API request service and a function that turns an error into text.
 import {apiService, getErrorMessage} from '../../services/api.service.ts';
+// Typed createAsyncThunk and the "do we need to load" check.
 import {createAppAsyncThunk, shouldLoad} from '../createAppAsyncThunk.ts';
 
+// Initial state: posts are not loaded yet, status idle, no error.
 const initialState: IListState<IPost> = {items: [], status: 'idle', error: null};
 
+// Async action (thunk) that loads posts from the API.
 const loadPosts = createAppAsyncThunk(
+    // Action type: loadPosts/pending, /fulfilled, /rejected are derived from it.
     'postsSlice/loadPosts',
+    // Function that performs the request. The first argument is not needed (void), rejectWithValue comes from the second.
     async (_: void, {rejectWithValue}) => {
         try {
+            // Success: return the array — it becomes action.payload of the fulfilled action.
             return await apiService.getPosts();
         } catch (e) {
+            // Error: pass its text to action.payload of the rejected action.
             return rejectWithValue(getErrorMessage(e));
         }
     },
     {
-        // condition виконується ДО запиту: false → thunk навіть не стартує (ні pending, ні fetch).
-        // Тому сторінки можуть сміливо робити dispatch(loadPosts()) — з API тягнемо лише раз.
+        // condition runs BEFORE the request: false → the thunk does not start at all (no pending, no fetch).
+        // So pages can safely call dispatch(loadPosts()) — the API is called only once.
         condition: (_, {getState}) => shouldLoad(getState().postsSlice.status),
     },
 );
 
+// Posts slice: stores the list and its loading status.
 export const postsSlice = createSlice({
+    // Slice name — prefix for action types.
     name: 'postsSlice',
+    // Initial state (see above).
     initialState,
+    // No synchronous reducers — the state changes only through the thunk.
     reducers: {},
+    // Handling of the loadPosts thunk actions.
     extraReducers: builder =>
         builder
+            // Request started: set status loading and clear the previous error.
             .addCase(loadPosts.pending, state => {
                 state.status = 'loading';
                 state.error = null;
             })
+            // Request succeeded: save the received posts and set status succeeded.
             .addCase(loadPosts.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.items = action.payload;
             })
+            // Request failed: status failed and the error text (from rejectWithValue or from the error itself).
             .addCase(loadPosts.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.payload ?? action.error.message ?? 'Невідома помилка';
+                state.error = action.payload ?? action.error.message ?? 'Unknown error';
             }),
 });
 
+// All slice actions in one object: regular actions (none here) + the loadPosts thunk.
 export const postsSliceActions = {...postsSlice.actions, loadPosts};
